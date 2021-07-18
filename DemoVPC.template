@@ -769,7 +769,7 @@
                 }
             }
         },
-        "WebTier": {
+        "WebTierSG": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
                 "GroupDescription": "Allow http from anywhere",
@@ -799,7 +799,7 @@
                 }
             }
         },
-        "BackEndTier": {
+        "BackEndTierSG": {
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
                 "GroupDescription": "Allow mysql from WebTier",
@@ -821,7 +821,7 @@
                         "ToPort": 80,
                         "SourceSecurityGroupId": {
                             "Fn::GetAtt": [
-                                "WebTier",
+                                "WebTierSG",
                                 "GroupId"
                             ]
                         }
@@ -832,6 +832,33 @@
                 "AWS::CloudFormation::Designer": {
                     "id": "e086de0f-4fa1-40e9-a87a-9b55e81d856c"
                 }
+            }
+        }
+    },
+    "Outputs": {
+        "VPCID": {
+            "Value": {
+                "Ref": "VPC"
+            }
+        },
+        "PUBSUBA": {
+            "Value": {
+                "Ref": "PubSubnetA"
+            }
+        },
+        "PUBSUBB": {
+            "Value": {
+                "Ref": "PubSubnetB"
+            }
+        },
+        "PRIVSUBA": {
+            "Value": {
+                "Ref": "PrivSubnetA"
+            }
+        },
+        "PRIVSUBB": {
+            "Value": {
+                "Ref": "PrivSubnetB"
             }
         }
     }
