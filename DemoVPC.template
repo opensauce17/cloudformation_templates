@@ -337,8 +337,16 @@
             }
         }
     },
+    "Parameters": {
+        "EnvironmentName": {
+            "Type": "String",
+            "Description": "The name of the environment for naming resource tags",
+            "MinLength": 3,
+            "MaxLength": 48
+        }
+    },
     "Resources": {
-        "RedVPC": {
+        "VPC": {
             "Type": "AWS::EC2::VPC",
             "Properties": {
                 "EnableDnsSupport": "true",
@@ -347,7 +355,9 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-VPC"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-VPC"
+                        }
                     }
                 ]
             },
@@ -361,13 +371,15 @@
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "CidrBlock": "10.0.1.0/24",
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-PubSubnetA"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-PubSubnetA"
+                        }
                     }
                 ]
             },
@@ -377,20 +389,22 @@
                 }
             },
             "DependsOn": [
-                "RedVPC"
+                "VPC"
             ]
         },
         "PubSubnetB": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "CidrBlock": "10.0.2.0/24",
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-PubSubnetB"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-PubSubnetB"
+                        }
                     }
                 ]
             },
@@ -400,20 +414,22 @@
                 }
             },
             "DependsOn": [
-                "RedVPC"
+                "VPC"
             ]
         },
         "PrivSubnetA": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "CidrBlock": "10.0.100.0/24",
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-PrivSubnetA"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-PrivSubnetA"
+                        }
                     }
                 ]
             },
@@ -423,20 +439,22 @@
                 }
             },
             "DependsOn": [
-                "RedVPC"
+                "VPC"
             ]
         },
         "PrivSubnetB": {
             "Type": "AWS::EC2::Subnet",
             "Properties": {
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "CidrBlock": "10.0.101.0/24",
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-PrivSubnetB"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-PrivSubnetB"
+                        }
                     }
                 ]
             },
@@ -446,19 +464,21 @@
                 }
             },
             "DependsOn": [
-                "RedVPC"
+                "VPC"
             ]
         },
         "PubRouteTable1": {
             "Type": "AWS::EC2::RouteTable",
             "Properties": {
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-PubRouteTable1"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-PubRouteTable1"
+                        }
                     }
                 ]
             },
@@ -472,12 +492,14 @@
             "Type": "AWS::EC2::RouteTable",
             "Properties": {
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-PrivateRouteTable1"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-PrivateRouteTable1"
+                        }
                     }
                 ]
             },
@@ -491,12 +513,14 @@
             "Type": "AWS::EC2::RouteTable",
             "Properties": {
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-PrivateRouteTable2"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-PrivateRouteTable2"
+                        }
                     }
                 ]
             },
@@ -570,13 +594,15 @@
                 }
             }
         },
-        "RedIGW": {
+        "IGW": {
             "Type": "AWS::EC2::InternetGateway",
             "Properties": {
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-IGW"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-IGW"
+                        }
                     }
                 ]
             },
@@ -586,14 +612,14 @@
                 }
             }
         },
-        "RedIGWAttach": {
+        "IGWAttach": {
             "Type": "AWS::EC2::VPCGatewayAttachment",
             "Properties": {
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "InternetGatewayId": {
-                    "Ref": "RedIGW"
+                    "Ref": "IGW"
                 }
             },
             "Metadata": {
@@ -609,7 +635,7 @@
                     "Ref": "PubRouteTable1"
                 },
                 "GatewayId": {
-                    "Ref": "RedIGW"
+                    "Ref": "IGW"
                 },
                 "DestinationCidrBlock": "0.0.0.0/0"
             },
@@ -668,7 +694,9 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-NatGW-a"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-NatGW-a"
+                        }
                     }
                 ]
             },
@@ -693,7 +721,9 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-NatGW-b"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-NatGW-b"
+                        }
                     }
                 ]
             },
@@ -709,7 +739,9 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-EIP-a"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-EIP-a"
+                        }
                     }
                 ]
             },
@@ -725,7 +757,9 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-EIP-b"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-EIP-b"
+                        }
                     }
                 ]
             },
@@ -739,14 +773,16 @@
             "Type": "AWS::EC2::SecurityGroup",
             "Properties": {
                 "GroupDescription": "Allow http from anywhere",
-                 "Tags": [
+                "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-WebTier"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-WebTier"
+                        }
                     }
                 ],
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "SecurityGroupIngress": [
                     {
@@ -770,11 +806,13 @@
                 "Tags": [
                     {
                         "Key": "Name",
-                        "Value": "Red-BackendTier"
+                        "Value": {
+                            "Fn::Sub": "${EnvironmentName}-BackendTier"
+                        }
                     }
                 ],
                 "VpcId": {
-                    "Ref": "RedVPC"
+                    "Ref": "VPC"
                 },
                 "SecurityGroupIngress": [
                     {
