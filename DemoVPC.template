@@ -1,5 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
+    "Description" : "DemoVPC Stack",
     "Metadata": {
         "AWS::CloudFormation::Designer": {
             "25553c5e-9b22-46a1-80d7-79ea4ced4087": {
@@ -837,28 +838,57 @@
     },
     "Outputs": {
         "VPCID": {
+            "Description" : "The ID of the VPC",
             "Value": {
                 "Ref": "VPC"
-            }
+            },
+            "Export" : {
+                "Name" : {"Fn::Sub": "${AWS::StackName}-VPCID" }
+            } 
         },
         "PUBSUBA": {
+            "Description" : "The ID of Public Subnet A",
             "Value": {
                 "Ref": "PubSubnetA"
+            },
+             "Export" : {
+                "Name" : {"Fn::Sub": "${AWS::StackName}-PUBSUBA" }
             }
         },
         "PUBSUBB": {
+            "Description" : "The ID of Public Subnet B",
             "Value": {
                 "Ref": "PubSubnetB"
+            },
+            "Export" : {
+                "Name" : {"Fn::Sub": "${AWS::StackName}-PUBSUBB" }
             }
         },
         "PRIVSUBA": {
+            "Description" : "The ID of Private Subnet A",
             "Value": {
                 "Ref": "PrivSubnetA"
+            },
+            "Export" : {
+                "Name" : {"Fn::Sub": "${AWS::StackName}-PRIVSUBA" }
             }
         },
         "PRIVSUBB": {
+            "Description" : "The ID of Private Subnet B",
             "Value": {
                 "Ref": "PrivSubnetB"
+            },
+            "Export" : {
+                "Name" : {"Fn::Sub": "${AWS::StackName}-PRIVSUBB" }
+            }
+        },
+        "WEBTIERSG": {
+            "Description" : "The ID of WebTier SG",
+            "Value": {
+                "Ref": "WebTierSG"
+            },
+            "Export" : {
+                "Name" : {"Fn::Sub": "${AWS::StackName}-WEBTIERSG"}
             }
         }
     }
